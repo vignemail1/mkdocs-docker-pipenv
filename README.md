@@ -22,14 +22,12 @@ build-site:
   script:
     - cp /docs/Pipfile* /tmp/
     - rm -rf /docs
-    - git clone $CI_REPOSITORY_URL /docs
+    - git clone -b ${CI_COMMIT_REF_NAME} ${CI_REPOSITORY_URL} /docs
     - cp /tmp/Pipfile* /docs
     - cd /docs
     - pipenv sync
-    - pipenv run mkdocs build -c -d public
-    - mv public $CI_PROJECT_DIR/
+    - pipenv run mkdocs build -c -d $CI_PROJECT_DIR/public
     - cd $CI_PROJECT_DIR/
-
   artifacts:
     expire_in: 1 week
     paths:
@@ -54,6 +52,5 @@ deploy-to-prod:
     - echo "Other actions to do like SSH handling and file transfer (rsync over SSH?)"
   only:
     - master
-  when: manual
 
 ```
